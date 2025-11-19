@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Book - E-Library</title>
+    <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <h1>E-Library</h1>
+            <nav>
+                <ul>
+                    <li><a href="index2.html">Home</a></li>
+                    <li><a href="upload.php">Upload Book</a></li>
+                    <li><a href="search.html">Search Books</a></li>
+                    <li><a href="my_account.php">My Account</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Upload Book Section -->
+    <section class="upload-book">
+        <div class="container">
+            <h2>Upload a New Book</h2>
+            <form id="uploadForm">
+                <div class="form-group">
+                    <label for="title">Book Title</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="author">Author</label>
+                    <input type="text" id="author" name="author" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" rows="5" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="genre">Genre</label>
+                    <select id="genre" name="genre" required>
+                        <option value="" disabled selected>Select a genre</option>
+                        <option value="fiction">Fiction</option>
+                        <option value="non-fiction">Non-fiction</option>
+                        <option value="mystery">Mystery</option>
+                        <option value="sci-fi">Sci-Fi</option>
+                        <option value="fantasy">Fantasy</option>
+                        <option value="romance">Romance</option>
+                        <option value="thriller">Thriller</option>
+                        <option value="biography">Biography</option>
+                        <option value="history">History</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="cover">Book Cover</label>
+                    <input type="file" id="cover" name="cover" accept="image/*" required>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit">Upload Book</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 E-Library. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Link to the external JavaScript file -->
+    <script src="upload.js"></script>
+</body>
+</html>

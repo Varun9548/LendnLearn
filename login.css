@@ -1,0 +1,99 @@
+/* General Body Styles */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column; /* Ensure elements are stacked vertically */
+    justify-content: flex-start; /* Align content to the top */
+    align-items: center; /* Center content horizontally */
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f5f5f5;
+    color: #333;
+    padding-top: 20px; /* Adds space for the header */
+}
+
+/* Header Styling */
+header {
+    width: 100%;
+    text-align: center;
+    padding: 20px 0; /* Padding above and below the heading */
+    background-color: #4CAF50;
+    color: white;
+    font-size: 24px;
+}
+
+/* Main Section Styling */
+main {
+    display: flex;
+    justify-content: center; /* Center the .login-container horizontally */
+    width: 100%; /* Ensure the main section spans the full width */
+}
+
+/* Login Form Container */
+.login-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 320px; /* Set a specific width for the form */
+    text-align: center;
+}
+
+/* Form Field Labels */
+form label {
+    display: block;
+    margin: 12px 0 6px;
+    font-weight: bold;
+    text-align: left;
+}
+
+/* Input Fields Styling */
+form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+/* Focus State for Input Fields */
+form input:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+/* Button Styling */
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+/* Button Hover Effect */
+button:hover {
+    background-color: #45a049;
+}
+
+/* Button Active Effect */
+button:active {
+    background-color: #388e3c;
+}
+
+/* Registration Prompt Styling */
+#registerLink {
+    color: #4CAF50; /* Match the button color */
+    text-decoration: none; /* Remove underline */
+}
+
+#registerLink:hover {
+    text-decoration: underline; /* Underline on hover */
+}
