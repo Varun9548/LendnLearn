@@ -4,11 +4,11 @@ $db_host = getenv('DB_HOST') ?: 'aws-0-ap-south-1.pooler.supabase.com';
 $db_port = getenv('DB_PORT') ?: 6543;        
 $db_name = getenv('DB_NAME') ?: 'postgres';
 $db_user = getenv('DB_USER') ?: 'postgres.bpmpidpftytimisafyem';      
-$db_pass = getenv('DB_PASS') ?: 'LendnLearn@2026!Secure';          
+$db_pass = getenv('DB_PASS') ?: '';          
 
 try {
-    // Connect using PDO with the pgsql driver
-    $dsn = "pgsql:host=$db_host;port=$db_port;dbname=$db_name";
+    // Connect using PDO with the pgsql driver (SSL required for Supabase)
+    $dsn = "pgsql:host=$db_host;port=$db_port;dbname=$db_name;sslmode=require";
     $pdo = new PDO($dsn, $db_user, $db_pass, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
