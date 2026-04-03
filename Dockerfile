@@ -4,15 +4,18 @@ FROM php:8.2-apache
 RUN a2enmod rewrite
 
 # Install PostgreSQL dependencies and the PDO PostgreSQL extension
-RUN apt-get update && apt-get install -y libpq-dev \
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends libpq-dev \
     && docker-php-ext-install pdo pdo_pgsql pgsql
 
 # Copy application files to the Apache document root
 COPY . /var/www/html/
 
-# Ensure the cover images directory exists and is writable for book uploads
-RUN mkdir -p /var/www/html/cover_img \
-    && chown -R www-data:www-data /var/www/html/cover_img \
+# Ensure Apache can read all files (fixes missing CSS/JS) and cover_img is writable
+RUN chown -R www-data:www-data /var/www/html/ \
+    && find /var/www/html/ -type d -exec chmod 755 {} \; \
+    && find /var/www/html/ -type f -exec chmod 644 {} \; \
+    && mkdir -p /var/www/html/cover_img \
     && chmod -R 777 /var/www/html/cover_img
 
 # Expose port 80
