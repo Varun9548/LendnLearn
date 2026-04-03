@@ -5,7 +5,7 @@ services:
     plan: free
     envVars:
       - key: DB_HOST
-        value: aws-0-ap-south-1.pooler.supabase.com
+        value: aws-1-ap-south-1.pooler.supabase.com
       - key: DB_PORT
         value: "6543"
       - key: DB_NAME

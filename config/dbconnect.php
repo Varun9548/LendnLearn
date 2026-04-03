@@ -1,6 +1,6 @@
 <?php 
 // Support for Supabase PostgreSQL via Environment Variables
-$db_host = getenv('DB_HOST') ?: 'aws-0-ap-south-1.pooler.supabase.com'; 
+$db_host = getenv('DB_HOST') ?: 'aws-1-ap-south-1.pooler.supabase.com'; 
 $db_port = getenv('DB_PORT') ?: 6543;        
 $db_name = getenv('DB_NAME') ?: 'postgres';
 $db_user = getenv('DB_USER') ?: 'postgres.bpmpidpftytimisafyem';      
