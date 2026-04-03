@@ -5,12 +5,12 @@ services:
     plan: free
     envVars:
       - key: DB_HOST
-        value: db.bpmpidpftytimisafyem.supabase.co
+        value: aws-0-ap-south-1.pooler.supabase.com
       - key: DB_PORT
-        value: "5432"
+        value: "6543"
       - key: DB_NAME
         value: postgres
       - key: DB_USER
-        value: postgres
+        value: postgres.bpmpidpftytimisafyem
       - key: DB_PASS
         sync: false # You will need to enter the password manually in Render's dashboard
