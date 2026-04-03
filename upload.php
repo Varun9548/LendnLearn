@@ -17,29 +17,30 @@ if($_POST){
 		$filename = "";
 		///// if attachment is there
 		if($_FILES["cover"]["name"]){
-			$filename = stripslashes($_FILES['cover']['name']);
-			$extension = getExtension($filename);	
-			$extension = strtolower($extension);
-			$now=date("His");
-			$today_tm=date("Ym");
-			if (($extension != "jpg") && ($extension != "jpeg") && ($extension != "png") ){
+			$file = $_FILES['cover'];
+			$file_name = stripslashes($file['name']);
+			$extension = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+			$now = date("His");
+			$today_tm = date("Ym");
+			if (($extension != "jpg") && ($extension != "jpeg") && ($extension != "png")) {
 				$error_msg = "Invalid file extension";
 				$errors=1;
 			}
 			else{
-				$file = $_FILES['cover'];
-				$file_name = $file['name'];
-				$file_type = $file['type'];
-				$file_size = $file['size'];
 				$file_path = $file['tmp_name'];
-				$temp = explode(".", $file_name);   
-				///add date into image name before extension
-				$fileName = $temp[0].'_'.$now.'.'.$temp[1];          
-				if (!is_dir("cover_img/".$today_tm."/" )) {
-					mkdir("cover_img/".$today_tm."/", 0755, 'R');              
-				}              
-				$filename = "cover_img/".$today_tm."/".$fileName;
-				$isUpload =	move_uploaded_file($file_path, $filename);
+				$baseName = preg_replace('/[^A-Za-z0-9_-]/', '_', pathinfo($file_name, PATHINFO_FILENAME));
+				if ($baseName === '') {
+					$baseName = 'book_cover';
+				}
+				$fileName = $baseName.'_'.$now.'.'.$extension;
+				$relativeDir = "cover_img/".$today_tm."/";
+				$absoluteDir = __DIR__ . DIRECTORY_SEPARATOR . 'cover_img' . DIRECTORY_SEPARATOR . $today_tm;
+				if (!is_dir($absoluteDir)) {
+					mkdir($absoluteDir, 0755, true);
+				}
+				$filename = $relativeDir.$fileName;
+				$absolutePath = __DIR__ . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $filename);
+				$isUpload = move_uploaded_file($file_path, $absolutePath);
 				if($isUpload == true){
 					$errors=2;
 				}else{
@@ -53,13 +54,15 @@ if($_POST){
    		if($errors==2){
 			/////insert book data
 			$ref_no = "EB/".date("y")."/".$now;
-			$res_inst = mysqli_query($link1,"INSERT INTO book_master SET ref_no='".$ref_no."', email_id ='".$_SESSION['userid']."', book_title='".$_POST['title']."', book_author='".$_POST['author']."', book_description='".$_POST['description']."', book_genre='".$_POST['genre']."', book_cover_image='".$filename."', status='1', create_by='".$_SESSION['userid']."', create_on='".date("Y-m-d H:i:s")."'");
-			///// check query execution
-			if (!$res_inst) {
-				 $msg = "Error details1: " . mysqli_error($link1) . ".";
-			}else{
-				$msg = "Book is successfully uploaded";
-			}
+            try {
+                $stmt = $pdo->prepare("INSERT INTO book_master (ref_no, email_id, book_title, book_author, book_description, book_genre, book_location, book_cover_image, status, create_by, create_on) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)");
+                $stmt->execute([
+                    $ref_no, $_SESSION['userid'], $_POST['title'], $_POST['author'], $_POST['description'], $_POST['genre'], $_POST['location'], $filename, $_SESSION['userid'], date("Y-m-d H:i:s")
+                ]);
+                $msg = "Book is successfully uploaded";
+            } catch (PDOException $e) {
+                $msg = "Error details1: " . $e->getMessage() . ".";
+            }
 		}else{
 			$msg = "Attachment is not processed properly.".$error_msg;
 		}
@@ -76,7 +79,7 @@ if($_POST){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload Book - E-Library</title>
     <!-- Link to the external CSS file -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=20260331b">
 </head>
 <body>
     <!-- Header Section -->
@@ -85,10 +88,11 @@ if($_POST){
             <h1>E-Library</h1>
             <nav>
                 <ul>
-                    <li><a href="index2.html">Home</a></li>
+                    <li><a href="home.php">Home</a></li>
                     <li><a href="upload.php">Upload Book</a></li>
                     <li><a href="search.php">Search Books</a></li>
                     <li><a href="my_account.php">My Account</a></li>
+                    <li><a href="logout.php">Logout</a></li>
                 </ul>
             </nav>
         </div>
@@ -128,6 +132,11 @@ if($_POST){
                         <option value="biography">Biography</option>
                         <option value="history">History</option>
                     </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="location">Book Location</label>
+                    <input type="text" id="location" name="location" placeholder="Area / City where the book is available" required>
                 </div>
 
                 <div class="form-group">

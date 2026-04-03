@@ -2,17 +2,17 @@
 document.addEventListener('DOMContentLoaded', function() {
     const getStartedButton = document.getElementById('getStartedButton');
 
-    if (getStartedButton) { // Check if button is found
+    if (getStartedButton) {
         getStartedButton.addEventListener('click', function() {
-            window.location.href = 'login.html'; // Redirects to the login page
+            window.location.href = 'login.php';
         });
-    } else {
-        console.error("Get Started button not found.");
     }
 
-    // Display "Member Since" date
-    const memberSinceDate = localStorage.getItem('memberSince') || new Date().toLocaleDateString();
-    document.getElementById('memberSinceDisplay').innerText = memberSinceDate;
+    const memberSinceDisplay = document.getElementById('memberSinceDisplay');
+    if (memberSinceDisplay) {
+        const memberSinceDate = localStorage.getItem('memberSince') || new Date().toLocaleDateString();
+        memberSinceDisplay.innerText = memberSinceDate;
+    }
 
     // Example data for uploaded books - replace with actual data as needed
     const uploadedBooks = [
@@ -23,9 +23,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Display uploaded books
     const uploadedBooksList = document.getElementById('uploadedBooks');
-    uploadedBooks.forEach(book => {
-        const li = document.createElement('li');
-        li.textContent = book;
-        uploadedBooksList.appendChild(li);
-    });
+    if (uploadedBooksList) {
+        uploadedBooks.forEach(book => {
+            const li = document.createElement('li');
+            li.textContent = book;
+            uploadedBooksList.appendChild(li);
+        });
+    }
 });

@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - E-Library</title>
+    <title>User Login - E-Library</title>
     <link rel="stylesheet" href="login.css">
 </head>
 <body>
     <header>
-        <h2>Login to E-Library</h2>
+        <h2>User Login</h2>
     </header>
     <main>
         <div class="login-container"> <!-- Added a container div here -->
             <form id="loginForm" action="login_verify.php" method="POST">
+                <input type="hidden" name="login_type" value="user">
                 <label for="Email">Email</label>
                 <input type="text" id="email" name="email" required>
                 
@@ -26,6 +27,7 @@
             <p style="text-align: center; margin-top: 20px;">
                 New User? <a href="registration.html" id="registerLink">Register Here</a>
             </p>
+
         </div> <!-- Closing the container div -->
         <?php if(isset($_REQUEST["msg"])){ ?>
         <div class="form-group">

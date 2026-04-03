@@ -2,8 +2,9 @@
 //////// DB connection
 require_once("config/config.php");
 ///// get account details
-$res_acc = mysqli_query($link1,"SELECT * FROM user_master WHERE email_id='".$_SESSION['userid']."'");
-$row_acc = mysqli_fetch_assoc($res_acc);
+$stmt = $pdo->prepare("SELECT * FROM user_master WHERE email_id=?");
+$stmt->execute([$_SESSION['userid']]);
+$row_acc = $stmt->fetch();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +12,7 @@ $row_acc = mysqli_fetch_assoc($res_acc);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Books - E-Library</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=20260331b">
 </head>
 <body>
     <!-- Header Section -->
@@ -20,10 +21,11 @@ $row_acc = mysqli_fetch_assoc($res_acc);
             <h1>E-Library</h1>
             <nav>
                 <ul>
-                    <li><a href="index2.html">Home</a></li>
+                    <li><a href="home.php">Home</a></li>
                     <li><a href="upload.php">Upload Book</a></li>
                     <li><a href="search.php">Search Books</a></li>
                     <li><a href="my_account.php">My Account</a></li>
+                    <li><a href="logout.php">Logout</a></li>
                 </ul>
             </nav>
         </div>
@@ -35,8 +37,8 @@ $row_acc = mysqli_fetch_assoc($res_acc);
             <h2>Search for a Book</h2>
             <form id="searchForm" action="book_list.php" method="POST">
                 <div class="form-group">
-                    <label for="searchQuery">Enter Book Title or Author</label>
-                    <input type="text" id="searchQuery" name="searchQuery" placeholder="Search by title or author..." required>
+                    <label for="searchQuery">Enter Book Title, Author, or Location</label>
+                    <input type="text" id="searchQuery" name="searchQuery" placeholder="Search by title, author, or location..." required>
                 </div>
 
                 <div class="form-group">

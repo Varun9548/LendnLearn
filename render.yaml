@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: lendnlearn
+    env: docker
+    plan: free
+    envVars:
+      - key: DB_HOST
+        value: db.bpmpidpftytimisafyem.supabase.co
+      - key: DB_PORT
+        value: "5432"
+      - key: DB_NAME
+        value: postgres
+      - key: DB_USER
+        value: postgres
+      - key: DB_PASS
+        sync: false # You will need to enter the password manually in Render's dashboard
