@@ -29,23 +29,37 @@ if($_POST){
 			else{
 				$file_path = $file['tmp_name'];
 				$baseName = preg_replace('/[^A-Za-z0-9_-]/', '_', pathinfo($file_name, PATHINFO_FILENAME));
-				if ($baseName === '') {
-					$baseName = 'book_cover';
-				}
+				if ($baseName === '') { $baseName = 'book_cover'; }
 				$fileName = $baseName.'_'.$now.'.'.$extension;
-				$relativeDir = "cover_img/".$today_tm."/";
-				$absoluteDir = __DIR__ . DIRECTORY_SEPARATOR . 'cover_img' . DIRECTORY_SEPARATOR . $today_tm;
-				if (!is_dir($absoluteDir)) {
-					mkdir($absoluteDir, 0755, true);
-				}
-				$filename = $relativeDir.$fileName;
-				$absolutePath = __DIR__ . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $filename);
-				$isUpload = move_uploaded_file($file_path, $absolutePath);
-				if($isUpload == true){
-					$errors=2;
-				}else{
-					$errors=1;
-					$error_msg = "Upload Error";
+				$storagePath = date('Ym') . '/' . $fileName;
+
+				$supabaseUrl = getenv('SUPABASE_URL') ?: 'https://bpmpidpftytimisafyem.supabase.co';
+				$supabaseKey = getenv('SUPABASE_SERVICE_KEY') ?: '';
+				$mimeType = 'image/' . ($extension === 'jpg' ? 'jpeg' : $extension);
+				$fileContent = file_get_contents($file_path);
+
+				$uploadUrl = $supabaseUrl . '/storage/v1/object/book-covers/' . $storagePath;
+				$ch = curl_init($uploadUrl);
+				curl_setopt_array($ch, [
+					CURLOPT_CUSTOMREQUEST => 'POST',
+					CURLOPT_POSTFIELDS    => $fileContent,
+					CURLOPT_HTTPHEADER    => [
+						'Authorization: Bearer ' . $supabaseKey,
+						'Content-Type: ' . $mimeType,
+						'x-upsert: true',
+					],
+					CURLOPT_RETURNTRANSFER => true,
+				]);
+				$response = curl_exec($ch);
+				$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+				curl_close($ch);
+
+				if ($httpCode === 200 || $httpCode === 200) {
+					$filename = $supabaseUrl . '/storage/v1/object/public/book-covers/' . $storagePath;
+					$errors = 2;
+				} else {
+					$errors = 1;
+					$error_msg = "Storage upload failed (HTTP $httpCode)";
 				}
 			}
 		}else{

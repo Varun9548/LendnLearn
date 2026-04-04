@@ -61,7 +61,8 @@ while ($row_request_status = $stmt->fetch()) {
         $res_bk = $stmt_bk->fetchAll();
         if (count($res_bk) > 0) {
 			foreach($res_bk as $row_bk){
-                $coverImage = (!empty($row_bk['book_cover_image']) && file_exists(__DIR__ . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $row_bk['book_cover_image']))) ? $row_bk['book_cover_image'] : 'cover_img/default-cover.svg';
+                $img = $row_bk['book_cover_image'] ?? '';
+                $coverImage = (!empty($img) && (str_starts_with($img, 'http') || file_exists(__DIR__ . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $img)))) ? $img : 'cover_img/default-cover.svg';
                 $requestStatus = $requestStatusMap[(int) $row_bk['id']] ?? '';
 		?>
     	<div class="book-card">
