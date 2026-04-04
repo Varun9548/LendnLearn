@@ -19,12 +19,12 @@ while ($row_request_status = $stmt->fetch()) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="book-style.css?v=20260331b">
     <link rel="stylesheet" href="styles.css?v=20260331b">
-    <title>E-Library</title>
+    <title>LendnLearn</title>
 </head>
 <body>
     <header>
         <div class="container">
-            <h1>E-Library</h1>
+            <h1>LendnLearn</h1>
             <nav>
                 <ul>
                     <li><a href="home.php">Home</a></li>

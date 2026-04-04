@@ -15,13 +15,13 @@ if ($row_acc && $row_acc['subscription_tier'] === 'PREMIUM') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upgrade to Premium - E-Library</title>
+    <title>Upgrade to Premium - LendnLearn</title>
     <link rel="stylesheet" href="styles.css?v=20260331b">
 </head>
 <body>
     <header>
         <div class="container">
-            <h1>E-Library Premium</h1>
+            <h1>LendnLearn Premium</h1>
             <nav>
                 <ul>
                     <li><a href="home.php">Home</a></li>
@@ -34,7 +34,7 @@ if ($row_acc && $row_acc['subscription_tier'] === 'PREMIUM') {
     <section class="premium-section" style="padding: 4rem 1rem; text-align: center;">
         <div class="container page-stack">
             <h2>Upgrade to Premium</h2>
-            <p>Get the most out of E-Library for just <strong>$4.99/mo</strong>.</p>
+            <p>Get the most out of LendnLearn for just <strong>$4.99/mo</strong>.</p>
             <div class="account-card" style="max-width: 400px; margin: 2rem auto; text-align: left;">
                 <ul style="list-style: none; padding: 0; line-height: 2;">
                     <li>✅ <strong>Unlimited Borrow Requests</strong></li>
@@ -49,7 +49,7 @@ if ($row_acc && $row_acc['subscription_tier'] === 'PREMIUM') {
                             data-key="rzp_test_mockkey12345"
                             data-amount="499" 
                             data-currency="USD"
-                            data-name="E-Library Premium"
+                            data-name="LendnLearn Premium"
                             data-description="1 Month Subscription"
                             data-image="cover_img/default-cover.svg"
                             data-prefill.name="<?=htmlspecialchars($row_acc['user_name'])?>"

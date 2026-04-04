@@ -69,13 +69,13 @@ $editMode = isset($_GET['edit']) || (isset($_POST['save_account']) && $message !
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Account - E-Library</title>
+    <title>My Account - LendnLearn</title>
     <link rel="stylesheet" href="styles.css?v=20260331b">
 </head>
 <body>
     <header>
         <div class="container">
-            <h1>E-Library</h1>
+            <h1>LendnLearn</h1>
             <nav>
                 <ul>
                     <li><a href="home.php">Home</a></li>
@@ -207,7 +207,7 @@ $editMode = isset($_GET['edit']) || (isset($_POST['save_account']) && $message !
 
     <footer>
         <div class="container">
-            <p>&copy; 2024 E-Library. All Rights Reserved.</p>
+            <p>&copy; 2024 LendnLearn. All Rights Reserved.</p>
         </div>
     </footer>
 </body>

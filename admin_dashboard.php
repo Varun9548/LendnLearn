@@ -65,13 +65,13 @@ $res_recent_requests = $pdo->query("SELECT r.status, r.request_on, b.book_title,
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - E-Library</title>
+    <title>Admin Dashboard - LendnLearn</title>
     <link rel="stylesheet" href="styles.css?v=20260331b">
 </head>
 <body>
     <header>
         <div class="container">
-            <h1>E-Library Admin</h1>
+            <h1>LendnLearn Admin</h1>
             <nav>
                 <ul>
                     <li><a href="admin_dashboard.php">Dashboard</a></li>
@@ -272,7 +272,7 @@ $res_recent_requests = $pdo->query("SELECT r.status, r.request_on, b.book_title,
 
     <footer>
         <div class="container">
-            <p>&copy; 2024 E-Library. All Rights Reserved.</p>
+            <p>&copy; 2024 LendnLearn. All Rights Reserved.</p>
         </div>
     </footer>
 </body>
