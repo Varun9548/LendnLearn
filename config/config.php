@@ -1,9 +1,9 @@
 <?php
+ob_start();
 session_start();
-if($_SESSION['userid']==""){
-   header("Location:../sessionExpire.php");
-   exit;
+if (!isset($_SESSION['userid']) || $_SESSION['userid'] === '') {
+    header("Location:../sessionExpire.php");
+    exit;
 }
-ob_start(); 
 require_once("dbconnect.php");
 ?>
