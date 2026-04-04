@@ -35,8 +35,12 @@ if ($arr_res_aut && trim($arr_res_aut['password']) === $post_pwd) {
 	$_SESSION['userid'] = $arr_res_aut['email_id'];
 	$_SESSION['utype'] = $arr_res_aut['user_type'];
 	
-    $stmt_ins = $pdo->prepare("INSERT INTO login_data (userid, ip) VALUES (?, ?)");
-    $stmt_ins->execute([$arr_res_aut['email_id'], $_SERVER['REMOTE_ADDR']]);
+    try {
+        $stmt_ins = $pdo->prepare("INSERT INTO login_data (userid, ip) VALUES (?, ?)");
+        $stmt_ins->execute([$arr_res_aut['email_id'], $_SERVER['REMOTE_ADDR']]);
+    } catch (PDOException $e) {
+        // login_data table may not exist yet — login proceeds anyway
+    }
 
     if ($isAdmin) {
         header("Location:admin_dashboard.php");
