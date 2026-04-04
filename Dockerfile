@@ -3,10 +3,10 @@ FROM php:8.2-apache
 # Enable Apache mod_rewrite for routing
 RUN a2enmod rewrite
 
-# Install PostgreSQL dependencies and the PDO PostgreSQL extension
+# Install PostgreSQL dependencies, curl, and the required PHP extensions
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y --no-install-recommends libpq-dev \
-    && docker-php-ext-install pdo pdo_pgsql pgsql
+RUN apt-get update && apt-get install -y --no-install-recommends libpq-dev libcurl4-openssl-dev \
+    && docker-php-ext-install pdo pdo_pgsql pgsql curl
 
 # Copy application files to the Apache document root
 COPY . /var/www/html/

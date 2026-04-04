@@ -54,7 +54,7 @@ if($_POST){
 				$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 				curl_close($ch);
 
-				if ($httpCode === 200 || $httpCode === 200) {
+				if ($httpCode === 200 || $httpCode === 201) {
 					$filename = $supabaseUrl . '/storage/v1/object/public/book-covers/' . $storagePath;
 					$errors = 2;
 				} else {
