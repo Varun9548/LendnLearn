@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once("config/dbconnect.php");
 
@@ -13,21 +14,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['delete_book'])) {
         $bookId = intval($_POST['book_id'] ?? 0);
         if ($bookId > 0) {
-            $stmt = $pdo->prepare("SELECT book_cover_image FROM book_master WHERE id=? LIMIT 1");
-            $stmt->execute([$bookId]);
-            $rowBook = $stmt->fetch();
+            try {
+                $stmt = $pdo->prepare("SELECT book_cover_image FROM book_master WHERE id=?");
+                $stmt->execute([$bookId]);
+                $rowBook = $stmt->fetch();
 
-            $stmtDel = $pdo->prepare("DELETE FROM book_master WHERE id=?");
-            if ($stmtDel->execute([$bookId])) {
-                if ($rowBook && !empty($rowBook['book_cover_image']) && file_exists($rowBook['book_cover_image'])) {
-                    @unlink($rowBook['book_cover_image']);
+                $stmtDel = $pdo->prepare("DELETE FROM book_master WHERE id=?");
+                $stmtDel->execute([$bookId]);
+                if ($stmtDel->rowCount() > 0) {
+                    if ($rowBook && !empty($rowBook['book_cover_image']) && file_exists($rowBook['book_cover_image'])) {
+                        @unlink($rowBook['book_cover_image']);
+                    }
+                    header("Location: admin_dashboard.php?msg=" . urlencode("Book deleted successfully"));
+                    exit;
+                } else {
+                    header("Location: admin_dashboard.php?msg=" . urlencode("Book not found or already deleted"));
+                    exit;
                 }
-                header("Location: admin_dashboard.php?msg=" . urlencode("Book deleted successfully"));
+            } catch (PDOException $e) {
+                header("Location: admin_dashboard.php?msg=" . urlencode("Delete error: " . $e->getMessage()));
                 exit;
             }
         }
 
-        header("Location: admin_dashboard.php?msg=" . urlencode("Unable to delete the selected book"));
+        header("Location: admin_dashboard.php?msg=" . urlencode("Invalid book ID"));
         exit;
     }
 
@@ -204,9 +214,9 @@ $res_recent_requests = $pdo->query("SELECT r.status, r.request_on, b.book_title,
                                         <td><?=htmlspecialchars($book['book_location'] ?: 'Not shared')?></td>
                                         <td><?=htmlspecialchars($book['create_on'])?></td>
                                         <td>
-                                            <form method="post" action="admin_dashboard.php" onsubmit="return confirm('Delete this book?');">
-                                                <input type="hidden" name="book_id" value="<?=intval($book['id'])?>">
-                                                <button type="submit" name="delete_book" value="1" class="danger-btn">Delete</button>
+                                            <form method="post" action="admin_dashboard.php" class="delete-form">
+                                                <input type="hidden" name="book_id" value="<?=intval($book['id'])?>">  
+                                                <button type="submit" name="delete_book" value="1" class="danger-btn" onclick="return confirm('Delete this book permanently?')">Delete</button>
                                             </form>
                                         </td>
                                     </tr>
