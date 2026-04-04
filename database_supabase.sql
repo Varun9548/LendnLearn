@@ -7,9 +7,9 @@ CREATE TABLE IF NOT EXISTS user_master (
     password VARCHAR(50) NOT NULL,
     user_type VARCHAR(5) NOT NULL,
     status SMALLINT NOT NULL,
-    create_by VARCHAR(20) NOT NULL,
+    create_by VARCHAR(150) NOT NULL,
     create_on TIMESTAMP NOT NULL,
-    update_by VARCHAR(20) NOT NULL,
+    update_by VARCHAR(150) NOT NULL,
     update_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     subscription_tier VARCHAR(10) NOT NULL DEFAULT 'FREE' CHECK (subscription_tier IN ('FREE', 'PREMIUM'))
 );
