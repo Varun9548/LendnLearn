@@ -15,29 +15,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $bookId = intval($_POST['book_id'] ?? 0);
         if ($bookId > 0) {
             try {
-                $stmt = $pdo->prepare("SELECT book_cover_image FROM book_master WHERE id=?");
-                $stmt->execute([$bookId]);
-                $rowBook = $stmt->fetch();
-
                 $stmtDel = $pdo->prepare("DELETE FROM book_master WHERE id=?");
                 $stmtDel->execute([$bookId]);
-                if ($stmtDel->rowCount() > 0) {
-                    if ($rowBook && !empty($rowBook['book_cover_image']) && file_exists($rowBook['book_cover_image'])) {
-                        @unlink($rowBook['book_cover_image']);
-                    }
-                    header("Location: admin_dashboard.php?msg=" . urlencode("Book deleted successfully"));
-                    exit;
-                } else {
-                    header("Location: admin_dashboard.php?msg=" . urlencode("Book not found or already deleted"));
-                    exit;
-                }
+                $deleted = $stmtDel->rowCount();
+                $msg = $deleted > 0 ? 'Book deleted successfully' : 'Book not found or already deleted';
             } catch (PDOException $e) {
-                header("Location: admin_dashboard.php?msg=" . urlencode("Delete error: " . $e->getMessage()));
-                exit;
+                $msg = 'Delete error: ' . $e->getMessage();
             }
+        } else {
+            $msg = 'Invalid book ID received: ' . ($_POST['book_id'] ?? 'none');
         }
-
-        header("Location: admin_dashboard.php?msg=" . urlencode("Invalid book ID"));
+        // JS redirect avoids any headers-already-sent issue
+        echo '<script>window.location="admin_dashboard.php?msg=' . urlencode($msg) . '";</script>';
         exit;
     }
 
@@ -216,7 +205,7 @@ $res_recent_requests = $pdo->query("SELECT r.status, r.request_on, b.book_title,
                                         <td>
                                             <form method="post" action="admin_dashboard.php" class="delete-form">
                                                 <input type="hidden" name="book_id" value="<?=intval($book['id'])?>">  
-                                                <button type="submit" name="delete_book" value="1" class="danger-btn" onclick="return confirm('Delete this book permanently?')">Delete</button>
+                                                <button type="submit" name="delete_book" value="1" class="danger-btn">Delete</button>
                                             </form>
                                         </td>
                                     </tr>
