@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$bookId]);
             $rowBook = $stmt->fetch();
 
-            $stmtDel = $pdo->prepare("DELETE FROM book_master WHERE id=? LIMIT 1");
+            $stmtDel = $pdo->prepare("DELETE FROM book_master WHERE id=?");
             if ($stmtDel->execute([$bookId])) {
                 if ($rowBook && !empty($rowBook['book_cover_image']) && file_exists($rowBook['book_cover_image'])) {
                     @unlink($rowBook['book_cover_image']);
