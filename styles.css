@@ -103,32 +103,18 @@ nav ul li a:hover {
     width: 30%;
     background-color: #fff;
     padding: 15px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     text-align: center;
     margin-bottom: 20px;
     border: 2px solid transparent;  /* Initial border is transparent */
-    transition: transform 0.3s ease;  /* Add transition for smooth zoom and border effect */
+    border-radius: 12px;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, background-color 0.4s ease;
 }
 
 .book-item:hover {
-    transform: scale(1.2);  /* Slightly zooms the book item on hover */
-    animation: colorPulse 1.5s infinite;  /* Apply color pulse animation */
-}
-
-/* Keyframes for color pulse animation */
-@keyframes colorPulse {
-    0% {
-        background-color: #fff;  /* Start with the original color */
-        border-color: transparent;
-    }
-    50% {
-        background-color: rgb(172, 122, 228);  /* Intermediate color */
-        border-color: rgb(135, 31, 201);      /* Border color matches the background */
-    }
-    100% {
-        background-color: #fff;  /* Return to the original color */
-        border-color: transparent;
-    }
+    transform: translateY(-8px) scale(1.03);  /* Smoothly lifts the book item on hover */
+    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.12);
+    border-color: #3b82f6;
 }
 
 .book-item img {
@@ -860,4 +846,66 @@ nav ul li a:hover {
     vertical-align: middle;
     display: inline-block;
     box-shadow: 0 2px 4px rgba(255, 193, 7, 0.4);
+}
+
+/* Custom Animations and Styling for Purchasing and Transitions */
+.book-price-tag {
+    margin: 8px 0;
+    font-size: 14px;
+    color: #4b5563;
+}
+.price-val {
+    color: #10b981;
+    font-weight: 700;
+    font-size: 16px;
+}
+.buy-btn {
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+}
+.buy-btn:hover {
+    background: linear-gradient(135deg, #059669, #047857) !important;
+    box-shadow: 0 6px 15px rgba(16, 185, 129, 0.35) !important;
+}
+
+/* Page load fade in list animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.fade-in {
+    opacity: 0;
+    animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Smooth delays for list items */
+.books-grid .book-item:nth-child(1) { animation-delay: 0.05s; }
+.books-grid .book-item:nth-child(2) { animation-delay: 0.1s; }
+.books-grid .book-item:nth-child(3) { animation-delay: 0.15s; }
+.books-grid .book-item:nth-child(4) { animation-delay: 0.2s; }
+.books-grid .book-item:nth-child(5) { animation-delay: 0.25s; }
+.books-grid .book-item:nth-child(6) { animation-delay: 0.3s; }
+
+/* Micro-interactions for buttons */
+.borrow-btn, .warning-btn, .danger-btn, .primary-btn, .secondary-btn, form button, .account-btn {
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.borrow-btn:hover:not([disabled]), .primary-btn:hover, .account-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25) !important;
+}
+.warning-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25) !important;
+}
+.danger-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25) !important;
 }

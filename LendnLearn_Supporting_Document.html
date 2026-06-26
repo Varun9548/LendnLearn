@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LendnLearn Project Supporting Document</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; margin: 40px auto; max-width: 800px; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; margin-top: 30px; }
+        h3 { color: #16a085; }
+        ul { margin-left: 20px; }
+        li { margin-bottom: 10px; }
+        .header { text-align: center; margin-bottom: 50px; }
+        .date { color: #7f8c8d; font-style: italic; }
+        code { background: #f4f4f4; padding: 2px 5px; border-radius: 3px; font-family: monospace; }
+        pre { background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>LendnLearn Project Supporting Document</h1>
+        <p><strong>LendnLearn Development Team</strong></p>
+        <p class="date">June 2026</p>
+    </div>
+
+    <h2>1. Introduction & Abstract</h2>
+    <p><strong>LendnLearn</strong> is a comprehensive book exchange and library management platform designed to facilitate the lending and borrowing of books among users. The platform bridges the gap between readers who have books to share and those seeking new knowledge, fostering a community of continuous learning. It includes secure user authentication, advanced book search, borrow request management, and a dedicated administrator dashboard.</p>
+
+    <h2>2. Key Features</h2>
+    <ul>
+        <li><strong>User Authentication & Authorization:</strong> Secure login and registration with distinct roles for Regular Users and Administrators. Includes session management and tracking.</li>
+        <li><strong>Subscription Tiers:</strong> Users can access features based on their subscription status (<code>FREE</code> vs <code>PREMIUM</code>).</li>
+        <li><strong>Book Management:</strong> Users can upload books they wish to share, providing details such as Title, Author, Description, Genre, Location, and a Cover Image.</li>
+        <li><strong>Borrowing Workflow:</strong> Integrated request system allowing users to request a book from its owner, who can then review and manage pending borrow requests.</li>
+        <li><strong>Advanced Search:</strong> Filter and search through the book directory to easily find books by title, genre, or author.</li>
+        <li><strong>Administrator Dashboard:</strong> A central interface for admins to manage users, oversee platform activity, and monitor the book catalog.</li>
+    </ul>
+
+    <h2>3. Technology Stack</h2>
+    <p>The platform is built using a robust and scalable architecture:</p>
+    <ul>
+        <li><strong>Frontend:</strong> HTML5, Vanilla JavaScript, CSS3 (Custom styling including <code>book-style.css</code>, <code>login.css</code>, <code>styles.css</code>)</li>
+        <li><strong>Backend:</strong> PHP (Core backend logic, API endpoints, session handling)</li>
+        <li><strong>Database:</strong> PostgreSQL (managed via Supabase) for robust data storage. (Initial prototypes used MySQL).</li>
+        <li><strong>Infrastructure/Deployment:</strong> Render, Docker (containerized deployment using <code>Dockerfile</code>), Supabase Storage for cover image hosting.</li>
+    </ul>
+
+    <h2>4. System Architecture & Database Schema</h2>
+    <p>The system utilizes a relational database model encompassing the following core entities:</p>
+    <ul>
+        <li><strong><code>user_master</code>:</strong> Stores user profiles, authentication details, role (<code>USER</code>, <code>ADMIN</code>), and subscription tier.</li>
+        <li><strong><code>book_master</code>:</strong> Contains records of all uploaded books, including references to the uploader, metadata (title, author, genre), and current status.</li>
+        <li><strong><code>borrow_requests</code>:</strong> Facilitates the transaction between borrowers and lenders. Tracks <code>book_id</code>, <code>requester_email</code>, <code>owner_email</code>, and request <code>status</code>.</li>
+        <li><strong><code>login_data</code>:</strong> Maintains an audit trail of user login sessions, timestamps, and IP addresses.</li>
+    </ul>
+
+    <h2>5. Security & Data Flow</h2>
+    <ul>
+        <li>All user passwords and sensitive data are processed securely via the backend PHP scripts (<code>login_verify.php</code>, <code>register.php</code>).</li>
+        <li>Session states are monitored (<code>sessionExpire.php</code>, <code>logout.php</code>) to ensure data protection and proper access control.</li>
+        <li>Input fields are validated on the client side using JavaScript (<code>login.js</code>, <code>upload.js</code>) and sanitized on the server to prevent SQL injection.</li>
+    </ul>
+
+    <h2>6. Setup & Deployment Instructions</h2>
+    <h3>Local Environment</h3>
+    <ol>
+        <li>Clone the repository and navigate to the project directory.</li>
+        <li>Start a local PHP server or use XAMPP/WAMP.
+            <pre><code>php -S localhost:8000</code></pre>
+        </li>
+        <li>Import the <code>database.sql</code> (or <code>database_supabase.sql</code>) into your database.</li>
+        <li>Update connection strings in the <code>config</code> directory to match your local database credentials.</li>
+    </ol>
+
+    <h3>Production Environment</h3>
+    <p>The project is containerized and configured for automated deployment via Render.</p>
+    <ul>
+        <li>Push changes to the main branch connected to Render.</li>
+        <li>Ensure environment variables for the Supabase Database and Storage are securely configured in the Render Dashboard.</li>
+        <li>The <code>Dockerfile</code> handles the necessary PHP extensions and setup for the cloud environment.</li>
+    </ul>
+
+    <h2>7. Conclusion</h2>
+    <p>LendnLearn provides an intuitive, reliable, and scalable foundation for a digital book exchange community. By leveraging modern cloud tools (Render, Supabase) and a lightweight PHP backend, the platform is designed for high availability and easy maintenance.</p>
+
+</body>
+</html>

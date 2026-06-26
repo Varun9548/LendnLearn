@@ -65,23 +65,22 @@ while ($row_request_status = $stmt->fetch()) {
                 $coverImage = (!empty($img) && (str_starts_with($img, 'http') || file_exists(__DIR__ . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $img)))) ? $img : 'cover_img/default-cover.svg';
                 $requestStatus = $requestStatusMap[(int) $row_bk['id']] ?? '';
 		?>
-    	<div class="book-card">
+    	<div class="book-card fade-in">
         	<img src="<?=htmlspecialchars($coverImage)?>" alt="Book Cover" onerror="this.src='cover_img/default-cover.svg'">
             <h2><?=htmlspecialchars($row_bk['book_title'])?></h2>
             <p><strong>Author:</strong> <?=htmlspecialchars($row_bk['book_author'])?><?php if (isset($row_bk['subscription_tier']) && $row_bk['subscription_tier'] === 'PREMIUM') echo ' <span class="pro-badge">PRO</span>'; ?></p>
             <p><strong>Location:</strong> <?=htmlspecialchars($row_bk['book_location'] ?: 'Not shared')?></p>
             <p><strong>Added:</strong> <?=htmlspecialchars($row_bk['create_on'])?></p>
+            <p class="book-price-tag"><strong>Price:</strong> <span class="price-val">$<?=number_format($row_bk['price'] ?? 0.00, 2)?></span></p>
             <?php if ($row_bk['email_id'] === $_SESSION['userid']) { ?>
                 <button class="borrow-btn" type="button" disabled>Your Book</button>
-            <?php } elseif ($requestStatus === 'Pending') { ?>
-                <button class="borrow-btn request-sent-btn" type="button" disabled>Request Sent</button>
-            <?php } elseif ($requestStatus === 'Approved') { ?>
-                <button class="borrow-btn approved-btn" type="button" disabled>Request Approved</button>
+            <?php } elseif ($requestStatus === 'Purchased') { ?>
+                <button class="borrow-btn approved-btn" type="button" style="background:#10b981; color:#fff;" disabled>✓ Purchased</button>
             <?php } else { ?>
-                <form method="post" action="borrow_request.php" class="inline-request-form">
+                <form method="get" action="payment.php" class="inline-request-form" style="margin: 8px 0 0; padding: 0; box-shadow: none; background: transparent;">
                     <input type="hidden" name="book_id" value="<?=intval($row_bk['id'])?>">
                     <input type="hidden" name="return_to" value="book_list.php">
-                    <button class="borrow-btn" type="submit" name="request_book" value="1">Request Borrow</button>
+                    <button class="borrow-btn buy-btn" type="submit">Buy Now</button>
                 </form>
             <?php } ?>
         </div>

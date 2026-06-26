@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Golf Charity Platform Supporting Document</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; margin: 40px auto; max-width: 800px; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 2px solid #27ae60; padding-bottom: 10px; }
+        h2 { color: #2ecc71; margin-top: 30px; }
+        h3 { color: #16a085; }
+        ul { margin-left: 20px; }
+        li { margin-bottom: 10px; }
+        .header { text-align: center; margin-bottom: 50px; }
+        .date { color: #7f8c8d; font-style: italic; }
+        code { background: #f4f4f4; padding: 2px 5px; border-radius: 3px; font-family: monospace; }
+        pre { background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Golf Charity Subscription Platform<br>Supporting Document</h1>
+        <p><strong>Development Team</strong></p>
+        <p class="date">June 2026</p>
+    </div>
+
+    <h2>1. Introduction & Abstract</h2>
+    <p>The <strong>Golf Charity Subscription Platform</strong> is a full-stack web application designed to support a golf charity organization. It provides a seamless interface for managing user memberships, facilitating secure charity donations, and handling subscription fees. The platform centralizes member engagement through automated payment processing and a comprehensive administrative dashboard.</p>
+
+    <h2>2. Key Features</h2>
+    <ul>
+        <li><strong>User Authentication & Authorization:</strong> Secure sign-up, login, and access control for general members and administrators.</li>
+        <li><strong>Subscription Management:</strong> Complete workflow for users to subscribe to different charity tiers, view their active memberships, and manage renewals.</li>
+        <li><strong>Payment Gateway Integration:</strong> Live payment processing powered by <strong>Razorpay</strong>, ensuring secure transactions for donations and subscription fees.</li>
+        <li><strong>Administrator Dashboard:</strong> A central command interface for administrators to track active subscriptions, monitor revenue, and manage user accounts.</li>
+        <li><strong>Responsive Interface:</strong> Server-side rendered views designed to provide a smooth experience across devices.</li>
+    </ul>
+
+    <h2>3. Technology Stack</h2>
+    <p>The platform is built on a scalable Node.js architecture:</p>
+    <ul>
+        <li><strong>Backend Environment:</strong> Node.js and Express.js (handling routing, business logic, and API integrations).</li>
+        <li><strong>Frontend / Templating:</strong> EJS (Embedded JavaScript) for dynamic, server-side rendered HTML views.</li>
+        <li><strong>Database & Storage:</strong> Supabase (PostgreSQL) utilized for robust relational data storage and secure backend services.</li>
+        <li><strong>Payment Processing:</strong> Razorpay API integration for end-to-end payment management.</li>
+    </ul>
+
+    <h2>4. System Architecture & Flow</h2>
+    <ul>
+        <li><strong>Client-Server Interaction:</strong> The client interacts with EJS views served by the Node.js Express application.</li>
+        <li><strong>Payment Flow:</strong> When a user initiates a subscription, the backend creates an order via the Razorpay API. The client completes the transaction using the Razorpay checkout, and the backend verifies the payment signature before updating the user's subscription status in the database.</li>
+        <li><strong>Data Management:</strong> User profiles, subscription histories, and transaction logs are securely stored in the Supabase PostgreSQL database.</li>
+    </ul>
+
+    <h2>5. Setup & Deployment Instructions</h2>
+    <h3>Local Environment</h3>
+    <ol>
+        <li>Clone the repository containing the Node.js application.</li>
+        <li>Install dependencies by running <code>npm install</code> in the project root.</li>
+        <li>Configure environment variables in a <code>.env</code> file, including:
+            <ul>
+                <li><code>PORT</code> (e.g., 3000)</li>
+                <li><code>SUPABASE_URL</code> and <code>SUPABASE_KEY</code></li>
+                <li><code>RAZORPAY_KEY_ID</code> and <code>RAZORPAY_KEY_SECRET</code></li>
+            </ul>
+        </li>
+        <li>Start the development server using <code>npm run dev</code> or <code>node index.js</code>.</li>
+        <li>Access the application locally at <code>http://localhost:3000</code>.</li>
+    </ol>
+
+    <h3>Production Environment</h3>
+    <ul>
+        <li>Ensure all environment variables are securely set in the hosting provider's dashboard.</li>
+        <li>The application can be containerized or directly hosted on platforms supporting Node.js (e.g., Render, Heroku).</li>
+    </ul>
+
+    <h2>6. Conclusion</h2>
+    <p>By integrating modern backend technologies with reliable payment processing and secure data storage, the Golf Charity Subscription Platform successfully streamlines the donation and membership workflow. It ensures transparency for administrators and a frictionless experience for members supporting the charity.</p>
+
+</body>
+</html>

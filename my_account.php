@@ -54,11 +54,11 @@ $stmt_b = $pdo->prepare("SELECT book_title, book_author, book_location, create_o
 $stmt_b->execute([$_SESSION['userid']]);
 $res_books = $stmt_b->fetchAll();
 
-$stmt_in = $pdo->prepare("SELECT r.id, r.status, r.request_message, r.request_on, b.book_title, u.user_name AS requester_name FROM borrow_requests r LEFT JOIN book_master b ON b.id = r.book_id LEFT JOIN user_master u ON u.email_id = r.requester_email WHERE r.owner_email=? ORDER BY r.request_on DESC");
+$stmt_in = $pdo->prepare("SELECT r.id, r.status, r.request_message, r.request_on, b.book_title, b.price, u.user_name AS requester_name FROM borrow_requests r LEFT JOIN book_master b ON b.id = r.book_id LEFT JOIN user_master u ON u.email_id = r.requester_email WHERE r.owner_email=? ORDER BY r.request_on DESC");
 $stmt_in->execute([$_SESSION['userid']]);
 $res_incoming_requests = $stmt_in->fetchAll();
 
-$stmt_out = $pdo->prepare("SELECT r.status, r.request_message, r.request_on, b.book_title, u.user_name AS owner_name FROM borrow_requests r LEFT JOIN book_master b ON b.id = r.book_id LEFT JOIN user_master u ON u.email_id = r.owner_email WHERE r.requester_email=? ORDER BY r.request_on DESC");
+$stmt_out = $pdo->prepare("SELECT r.status, r.request_message, r.request_on, b.book_title, b.price, u.user_name AS owner_name FROM borrow_requests r LEFT JOIN book_master b ON b.id = r.book_id LEFT JOIN user_master u ON u.email_id = r.owner_email WHERE r.requester_email=? ORDER BY r.request_on DESC");
 $stmt_out->execute([$_SESSION['userid']]);
 $res_outgoing_requests = $stmt_out->fetchAll();
 
@@ -129,57 +129,40 @@ $editMode = isset($_GET['edit']) || (isset($_POST['save_account']) && $message !
             </div>
 
             <div class="account-details account-card">
-                <h3>Incoming Borrow Requests</h3>
+                <h3>Incoming Purchases (Books Sold)</h3>
                 <ul class="account-book-list">
                     <?php if (count($res_incoming_requests) > 0) { ?>
                         <?php foreach($res_incoming_requests as $incoming) { ?>
-                            <li>
+                            <li class="fade-in">
                                 <strong><?=htmlspecialchars($incoming['book_title'] ?: 'Book request')?></strong><br>
-                                <span>Requested by <?=htmlspecialchars($incoming['requester_name'] ?: 'Reader')?> · <?=htmlspecialchars($incoming['request_on'])?></span><br>
-                                <span>Status: <strong><?=htmlspecialchars($incoming['status'])?></strong></span>
+                                <span>Purchased by <?=htmlspecialchars($incoming['requester_name'] ?: 'Reader')?> · <?=htmlspecialchars($incoming['request_on'])?></span><br>
+                                <span>Price: <strong>$<?=number_format($incoming['price'] ?? 0.00, 2)?></strong></span><br>
+                                <span>Status: <strong style="color: #10b981;"><?=htmlspecialchars($incoming['status'])?></strong></span>
                                 <?php if (!empty($incoming['request_message'])) { ?>
                                     <div class="request-note"><?=htmlspecialchars($incoming['request_message'])?></div>
-                                <?php } ?>
-                                <?php if ($incoming['status'] === 'Pending') { ?>
-                                    <div class="request-actions">
-                                        <form method="post" action="my_account.php">
-                                            <input type="hidden" name="request_id" value="<?=intval($incoming['id'])?>">
-                                            <button type="submit" name="request_action" value="Approved" class="borrow-btn small-btn">Approve</button>
-                                        </form>
-                                        <form method="post" action="my_account.php">
-                                            <input type="hidden" name="request_id" value="<?=intval($incoming['id'])?>">
-                                            <button type="submit" name="request_action" value="Rejected" class="warning-btn">Reject</button>
-                                        </form>
-                                    </div>
-                                <?php } elseif ($incoming['status'] === 'Approved') { ?>
-                                    <div class="request-actions">
-                                        <form method="post" action="my_account.php">
-                                            <input type="hidden" name="request_id" value="<?=intval($incoming['id'])?>">
-                                            <button type="submit" name="request_action" value="Returned" class="secondary-btn-link">Mark Returned</button>
-                                        </form>
-                                    </div>
                                 <?php } ?>
                             </li>
                         <?php } ?>
                     <?php } else { ?>
-                        <li>No incoming borrow requests yet.</li>
+                        <li>No books sold yet.</li>
                     <?php } ?>
                 </ul>
             </div>
 
             <div class="account-details account-card">
-                <h3>My Borrow Requests</h3>
+                <h3>My Purchases (Books Bought)</h3>
                 <ul class="account-book-list">
                     <?php if (count($res_outgoing_requests) > 0) { ?>
                         <?php foreach($res_outgoing_requests as $outgoing) { ?>
-                            <li>
+                            <li class="fade-in">
                                 <strong><?=htmlspecialchars($outgoing['book_title'] ?: 'Book request')?></strong><br>
                                 <span>Owner: <?=htmlspecialchars($outgoing['owner_name'] ?: 'Reader')?> · <?=htmlspecialchars($outgoing['request_on'])?></span><br>
-                                <span>Status: <strong><?=htmlspecialchars($outgoing['status'])?></strong></span>
+                                <span>Price: <strong>$<?=number_format($outgoing['price'] ?? 0.00, 2)?></strong></span><br>
+                                <span>Status: <strong style="color: #10b981;"><?=htmlspecialchars($outgoing['status'])?></strong></span>
                             </li>
                         <?php } ?>
                     <?php } else { ?>
-                        <li>You have not sent any borrow requests yet.</li>
+                        <li>You have not purchased any books yet.</li>
                     <?php } ?>
                 </ul>
             </div>

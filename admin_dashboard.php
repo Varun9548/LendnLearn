@@ -30,6 +30,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    if (isset($_POST['update_price'])) {
+        $bookId = intval($_POST['book_id'] ?? 0);
+        $price = floatval($_POST['book_price'] ?? 0.00);
+        if ($bookId > 0 && $price >= 0) {
+            try {
+                $stmtPrice = $pdo->prepare("UPDATE book_master SET price=? WHERE id=?");
+                $stmtPrice->execute([$price, $bookId]);
+                $msg = "Book price updated successfully";
+            } catch (PDOException $e) {
+                $msg = 'Price update error: ' . $e->getMessage();
+            }
+            echo '<script>window.location="admin_dashboard.php?msg=' . urlencode($msg) . '";</script>';
+            exit;
+        }
+    }
+
     if (isset($_POST['toggle_user'])) {
         $userEmail = trim($_POST['user_email'] ?? '');
 
@@ -53,7 +69,7 @@ $row_total_logins = $pdo->query("SELECT COUNT(*) AS total_logins FROM login_data
 $row_total_admins = $pdo->query("SELECT COUNT(*) AS total_admins FROM user_master WHERE UPPER(user_type)='ADMIN' AND status=1")->fetch();
 $row_total_requests = $pdo->query("SELECT COUNT(*) AS total_requests FROM borrow_requests")->fetch();
 
-$res_recent_books = $pdo->query("SELECT id, book_title, book_author, email_id, book_genre, book_location, create_on FROM book_master ORDER BY create_on DESC LIMIT 15")->fetchAll();
+$res_recent_books = $pdo->query("SELECT id, book_title, book_author, email_id, book_genre, book_location, create_on, price FROM book_master ORDER BY create_on DESC LIMIT 15")->fetchAll();
 $res_recent_logins = $pdo->query("SELECT userid, ip, log_date AS login_on FROM login_data ORDER BY log_date DESC LIMIT 10")->fetchAll();
 $res_users = $pdo->query("SELECT user_name, email_id, user_type, status, create_on FROM user_master ORDER BY create_on DESC LIMIT 15")->fetchAll();
 $res_top_uploaders = $pdo->query("SELECT email_id, COUNT(*) AS total_books FROM book_master GROUP BY email_id ORDER BY total_books DESC, email_id ASC LIMIT 5")->fetchAll();
@@ -189,6 +205,7 @@ $res_recent_requests = $pdo->query("SELECT r.status, r.request_on, b.book_title,
                                 <th>Genre</th>
                                 <th>Location</th>
                                 <th>Uploaded</th>
+                                <th>Price</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -203,6 +220,14 @@ $res_recent_requests = $pdo->query("SELECT r.status, r.request_on, b.book_title,
                                         <td><?=htmlspecialchars($book['book_location'] ?: 'Not shared')?></td>
                                         <td><?=htmlspecialchars($book['create_on'])?></td>
                                         <td>
+                                            <form method="post" action="admin_dashboard.php" class="price-form">
+                                                <input type="hidden" name="book_id" value="<?=intval($book['id'])?>">
+                                                <span style="font-size:14px; font-weight:bold; color:#555;">$</span>
+                                                <input type="number" name="book_price" value="<?=htmlspecialchars(number_format($book['price'] ?? 0.00, 2, '.', ''))?>" step="0.01" min="0" style="width:75px; padding:4px 6px; border:1px solid #ccc; border-radius:4px; font-size:13px; text-align:right;" required>
+                                                <button type="submit" name="update_price" value="1" class="warning-btn" style="padding:4px 8px; font-size:11px; margin:0; min-width:auto;">Save</button>
+                                            </form>
+                                        </td>
+                                        <td>
                                             <form method="post" action="admin_dashboard.php" class="delete-form">
                                                 <input type="hidden" name="book_id" value="<?=intval($book['id'])?>">  
                                                 <button type="submit" name="delete_book" value="1" class="danger-btn">Delete</button>
@@ -212,7 +237,7 @@ $res_recent_requests = $pdo->query("SELECT r.status, r.request_on, b.book_title,
                                 <?php } ?>
                             <?php } else { ?>
                                 <tr>
-                                    <td colspan="7">No books found.</td>
+                                    <td colspan="8">No books found.</td>
                                 </tr>
                             <?php } ?>
                         </tbody>
